@@ -66,7 +66,8 @@ contract SkinInTheGameSale is ReentrancyGuard {
     string public symbol;
     address public positiveToken;
     address public negativeToken;
-    address public creator;
+    address public creator; // <- collectFees
+    address public firstBuyer; // <- collectFees
     address public factory;
     uint256 public totalTokens;
     uint256 public totalRaised;
@@ -74,6 +75,7 @@ contract SkinInTheGameSale is ReentrancyGuard {
     uint8 public creatorshare;
     bool public launched;
     bool public status;
+
     uint256 public k; // Initial price factor
     uint256 public alpha; // Steepness factor for bonding curve
     uint256 public saleGoal; // Sale goal in ETH
@@ -276,12 +278,13 @@ contract SkinInTheGameSale is ReentrancyGuard {
 
 
     function launchSale(
-        address firstBuyer,
+        address _firstBuyer,
         address saleInitiator
     ) external onlyFactory nonReentrant {
         require(!launched, "Sale already launched");
         require(totalRaised >= saleGoal, "Sale goal not reached");
         require(status, "not bonded");
+        firstBuyer = _firstBuyer;
         launched = true;
 
         //TODO: 共通関数 deployPosition(...) -> address
@@ -362,7 +365,7 @@ contract SkinInTheGameSale is ReentrancyGuard {
     function collectFees() external nonReentrant {
         require(launched, "Not launched yet");
         require(
-            msg.sender == firstBuyer || msg.sender == saleInitiator,
+            msg.sender == firstBuyer || msg.sender == creator,
             "Not authorized"
         );
         require(posNftId != 0 && negNftId != 0, "No NFT positions");
