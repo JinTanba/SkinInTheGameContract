@@ -8,9 +8,9 @@ import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import { UD60x18, ud } from "@prb/math/src/UD60x18.sol";
 import "@openzeppelin/contracts/utils/Address.sol";
 // ---- Uniswap V3 関連のインポート例 ----
-// import "@uniswap/v3-periphery/contracts/interfaces/INonfungiblePositionManager.sol";
-// import "@uniswap/v3-periphery/contracts/interfaces/external/IWETH9.sol";
-// import "@uniswap/v3-core/contracts/libraries/TickMath.sol";
+import "@uniswap/v3-periphery/contracts/interfaces/INonfungiblePositionManager.sol";
+import "@uniswap/v3-periphery/contracts/interfaces/external/IWETH9.sol";
+import "@uniswap/v3-core/contracts/libraries/TickMath.sol";
 
 import "./interfaces/IUniswapV2Router01.sol"; // もとの V2 用。必要なければ削除してOK
 import "./NewsComment.sol";
