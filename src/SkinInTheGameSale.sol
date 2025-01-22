@@ -57,7 +57,7 @@ interface IWETH9 {
     function approve(address guy, uint256 wad) external returns (bool);
 }
 
-contract EtherfunSale is ReentrancyGuard {
+contract SkinInTheGameSale is ReentrancyGuard {
 
 
     using Address for address payable;

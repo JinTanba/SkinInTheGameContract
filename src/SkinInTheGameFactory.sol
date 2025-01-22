@@ -111,7 +111,7 @@ interface ISaleContract {
     function token() external view returns (address);
 }
 
-contract EtherFunFactory is ReentrancyGuard {
+contract SkinInTheGameFactory is ReentrancyGuard {
     event SaleCreated(
         address indexed saleContractAddress,
         address indexed creator,
@@ -211,7 +211,7 @@ contract EtherFunFactory is ReentrancyGuard {
         Storage.Configuration storage cfg = Storage.config();
 
         bytes memory bytecode = abi.encodePacked(
-            type(EtherfunSale).creationCode,
+            type(SkinInTheGameSale).creationCode,
             abi.encode(
                 sale.name,
                 sale.symbol,
@@ -324,7 +324,7 @@ contract EtherFunFactory is ReentrancyGuard {
         Storage.Configuration storage cfg = Storage.config();
         bytes32 salt = keccak256(abi.encodePacked(creator, nonce));
         bytes32 initCodeHash = keccak256(abi.encodePacked(
-            type(EtherfunSale).creationCode,
+            type(SkinInTheGameSale).creationCode,
             abi.encode(
                 name,
                 symbol,
