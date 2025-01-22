@@ -1,67 +1,14 @@
 // SPDX-License-Identifier: MIT
-pragma solidity >=0.8.19;
+pragma solidity 0.8.20;
 
 import "./PositionToken.sol";
-// import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import { UD60x18, ud } from "@prb/math/src/UD60x18.sol";
 import "@openzeppelin/contracts/utils/Address.sol";
-// ---- Uniswap V3 関連のインポート例 ----
 import "@uniswap/v3-periphery/contracts/interfaces/INonfungiblePositionManager.sol";
 import "@uniswap/v3-periphery/contracts/interfaces/external/IWETH9.sol";
 import "@uniswap/v3-core/contracts/libraries/TickMath.sol";
-
-import "./interfaces/IUniswapV2Router01.sol"; // もとの V2 用。必要なければ削除してOK
-import "./NewsComment.sol";
-
-interface INonfungiblePositionManager {
-    struct MintParams {
-        address token0;
-        address token1;
-        uint24 fee;
-        int24 tickLower;
-        int24 tickUpper;
-        uint256 amount0Desired;
-        uint256 amount1Desired;
-        uint256 amount0Min;
-        uint256 amount1Min;
-        address recipient;
-        uint256 deadline;
-    }
-
-    struct CollectParams {
-        uint256 tokenId;
-        address recipient;
-        uint128 amount0Max;
-        uint128 amount1Max;
-    }
-
-    function mint(MintParams calldata params)
-        external
-        payable
-        returns (
-            uint256 tokenId,
-            uint128 liquidity,
-            uint256 amount0,
-            uint256 amount1
-        );
-
-    function collect(CollectParams calldata params)
-        external
-        payable
-        returns (uint256 amount0, uint256 amount1);
-
-    // NFT を第三者に譲渡しないなら approve/setApprovalForAll は不要だが、残しておいてもOK
-    function approve(address to, uint256 tokenId) external;
-    function setApprovalForAll(address operator, bool _approved) external;
-}
-
-interface IWETH9 {
-    function deposit() external payable;
-    function withdraw(uint256 wad) external;
-    function approve(address guy, uint256 wad) external returns (bool);
-}
 
 contract EtherfunSale is ReentrancyGuard {
 
@@ -332,9 +279,9 @@ contract EtherfunSale is ReentrancyGuard {
         negativeTokenContract.approve(_positionManager, halfTokenAmountNeg);
 
         // ---- フルレンジ指定 (MIN_TICK ~ MAX_TICK) の例 ----
-        int24 MIN_TICK = -887272; // TickMath.MIN_TICK
-        int24 MAX_TICK = 887272;  // TickMath.MAX_TICK
-        uint24 feeTier = 3000;    // お好みで
+        int24 MIN_TICK = TickMath.MIN_TICK;
+        int24 MAX_TICK = TickMath.MIN_TICK;
+        uint24 feeTier = 3000;
 
         // ============ PositiveToken / WETH ペアで流動性追加 ============
         {
